@@ -40,7 +40,7 @@ async function generate_location_proof(x, y, xr, yr){
     }
 
     let generate_proof_command = 'zokrates generate-proof';
-    console.log(generate_proof_command);
+    // console.log(generate_proof_command);
 
     try {
       const output2 = execSync(generate_proof_command, {cwd: '/Users/riyasingh/myapps/zkloc/location/', encoding: 'utf-8' }, (e, res) => {
