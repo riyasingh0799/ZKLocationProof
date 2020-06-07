@@ -1,0 +1,20 @@
+{
+  "name": "zkloc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "truffle": "^5.1.28",
+    "web3": "^1.2.8",
+    "zokrates-js": "^1.0.22"
+  }
+}
