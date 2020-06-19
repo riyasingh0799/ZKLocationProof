@@ -21,11 +21,16 @@ app.get('/', async(req, res) => {
 })
 
 app.get('/loc/proof', async (req, res) => {
-   var x = parseInt(req.param("x")).toFixed(7)
-    var y = parseInt(req.param("y")).toFixed(7)
-    var xr = parseInt(req.param("xr")).toFixed(7)
-    var yr = parseInt(req.param("yr")).toFixed(7)
+var x = parseFloat(req.param("x"))
+var y = parseFloat(req.param("y")) 
+var xr = parseFloat(req.param("xr")) 
+var yr = parseFloat(req.param("yr")) 
     var proof = await zkmain.generate_location_proof(x, y, xr, yr)
+    console.log(x)
+    console.log(y)
+    console.log(xr)
+    console.log(yr)
+
     res.send(proof) 
 })
 
@@ -34,51 +39,32 @@ app.get('/loc/verify', async (req, res) => {
     // console.log('the verifying bit')
     var proofString = req.param("location_proof")
     var location_proof = JSON.parse(decodeURI(proofString))
-    console.log(location_proof)
     accounts = await web3.eth.getAccounts()
-    console.log(accounts)
+    // console.log(accounts)
     try {
-        // result = Promise.resolve(locationverifier.methods.verifyTx(location_proof["proof"]["a"], location_proof["proof"]["b"], location_proof["proof"]["c"],location_proof["inputs"])
-        // .call({from: accounts[0], gas: 600000}))
+        // console.log(location_proof)
+        console.log([parseInt(location_proof["inputs"][0])])
+        
+        result =  await locationverifier.methods.verifyTx(location_proof["proof"]["a"], location_proof["proof"]["b"], location_proof["proof"]["c"], [1])
+        .call({from: accounts[0], gas: 600000})
 
-        result =  await (locationverifier.methods.verifyTx(location_proof["proof"]["a"], location_proof["proof"]["b"], location_proof["proof"]["c"],location_proof["inputs"])
-        .call({from: accounts[0], gas: 600000}))
+        console.log("result is " + result)
+        res.json(result)
+        result = null
     }
     catch(error) {
         console.log(error)
     }
-    // console.log(accounts)
-    // try {
-    //     result = await locationverifier.methods.verifyTx(location_proof["proof"]["a"], location_proof["proof"]["b"], location_proof["proof"]["c"],location_proof["inputs"])
-    //     .call({from:accounts[0], gas: 600000})
-    // }
-    // catch(e) {
-    //     console.log(e)
-    // }
-
-    console.log("result is " + result)
-    // res.send(result)
+    
 })
 
 async function getContracts() {
     let chainId = await web3.eth.net.getId()
     console.log(chainId)
     locationverifier = new web3.eth.Contract(LocationVerifier.abi, LocationVerifier["networks"][chainId]["address"])
-    // console.log(locationverifier)
 }
 
 app.listen(3000, () =>{
     console.log(`Server started.`)
 })
-
-
-
-
-
-
-
-
-
-
-
 

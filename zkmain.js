@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const execSync = require('child_process').execSync;
 
 function degreesToRadians(degrees) {
@@ -21,10 +23,11 @@ async function distanceInMBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 
 async function generate_location_proof(x, y, xr, yr){
 
+    var path = "./location/proof.json"
     var d = await distanceInMBetweenEarthCoordinates(x, y, xr, yr)
     d = Math.round(d)
     let compute_witness_command = 'zokrates compute-witness -a ' + String(d);
-    // console.log(compute_witness_command);
+    console.log(compute_witness_command);
     try {
       const output1 = execSync(compute_witness_command, {cwd: '/Users/riyasingh/myapps/zkloc/location/', encoding: 'utf-8' })
       // , function (error, stdout, stderr) {
@@ -53,22 +56,18 @@ async function generate_location_proof(x, y, xr, yr){
     catch(e) {
       console.log(e)
     }
-    let proof = require("./location/proof.json");  
-
+    let proof = fs.readFileSync(path, 'utf-8');  
+    // console.log(proof)
+    try {
+      fs.unlinkSync(path)
+      //file removed
+    } catch(err) {
+      console.error(err)
+    }
+    
     return proof;
 }
-
-// async function main() {
-//   var location_proof = generate_location_proof(0, 0, 5, 5)
-//   console.log(JSON.stringify(location_proof));
-// }
 
 module.exports = {
   generate_location_proof
 }
-
-// document.getElementById('get-loc-proof').addEventListener('click', function() {
-//   var location_proof = generate_location_proof(0, 0, 5, 5)
-//   console.log(JSON.stringify(location_proof))
-//   // document.getElementById('get-png').innerHTML = location_proof;
-// })
