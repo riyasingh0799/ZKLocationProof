@@ -24,7 +24,7 @@ async function generate_location_proof(x, y, xr, yr){
     var d = await distanceInMBetweenEarthCoordinates(x, y, xr, yr)
     d = Math.round(d)
     let compute_witness_command = 'zokrates compute-witness -a ' + String(d);
-    console.log(compute_witness_command);
+    // console.log(compute_witness_command);
     try {
       const output1 = execSync(compute_witness_command, {cwd: '/Users/riyasingh/myapps/zkloc/location/', encoding: 'utf-8' })
       // , function (error, stdout, stderr) {
